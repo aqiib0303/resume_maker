@@ -1,0 +1,33 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.log
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Flask
+instance/*
+!instance/.gitkeep
+
+# Secrets / env
+.env
+.env.*
+
+# DBs and generated files
+*.sqlite
+*.sqlite3
+*.db
+*.pdf

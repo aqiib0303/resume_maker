@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ data.name }} - Resume</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        section h2 {
+            font-size: 22px;
+            color: #007bff;
+            margin-bottom: 12px;
+            border-left: 4px solid #007bff;
+            padding-left: 10px;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill {
+            background: #e9f3ff;
+            color: #007bff;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            background: #f0f8ff;
+            transform: translateX(5px);
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+
+        .summary {
+            background: #f9f9f9;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 10px;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ data.name }}</h1>
+            <p>{{ data.role }}</p>
+        </header>
+
+        <div class="summary">
+            {{ data.summary }}
+        </div>
+
+        <section>
+            <h2>Skills</h2>
+            <div class="skills">
+                {% for skill in data.skills %}
+                    <span class="skill">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section>
+            <h2>Experience</h2>
+            {% for exp in data.experiences %}
+                <div class="card">
+                    <p><strong>{{ exp.role }}</strong> @ {{ exp.company }}</p>
+                    <p><em>{{ exp.dates }}</em></p>
+                </div>
+            {% endfor %}
+        </section>
+
+        <section>
+            <h2>Education</h2>
+            {% for edu in data.education %}
+                <div class="card">
+                    <p><strong>{{ edu.degree }}</strong> @ {{ edu.school }}</p>
+                    <p><em>{{ edu.dates }}</em></p>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
+</body>
+</html>

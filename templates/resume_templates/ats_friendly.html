@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>{{ data.name }} — Resume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    /* --- ATS-friendly: no images/icons/tables, semantic headings, clear structure --- */
+    :root { --ink:#0f172a; --muted:#475569; --rule:#e2e8f0; --chip:#f1f5f9; }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      color: var(--ink);
+      line-height: 1.4;
+      background:#fff;
+    }
+    .page {
+      width: 840px;               /* print-safe width; good for wkhtmltopdf */
+      margin: 28px auto;
+      padding: 32px 40px;
+      background:#fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    header h1 { margin:0; font-size: 30px; font-weight: 800; letter-spacing:.2px; }
+    header .role { color: var(--muted); margin-top: 2px; font-weight:600; }
+    header .summary { margin-top: 12px; color: var(--ink); white-space: pre-line; }
+
+    .sec { margin-top: 22px; }
+    .sec h2 {
+      font-size: 13px; letter-spacing:.12em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 8px; font-weight: 700;
+      border-bottom: 1px solid var(--rule); padding-bottom:6px;
+    }
+
+    /* Skills as readable chips (still pure text) */
+    .chips { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      display:inline-block; background: var(--chip); border:1px solid var(--rule);
+      padding: 4px 10px; border-radius: 999px; font-size: 12px;
+    }
+
+    /* Experience/Education blocks */
+    .item { margin-top: 12px; }
+    .item-head {
+      display:flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    }
+    .item-title { font-weight: 700; }
+    .item-sub   { color: var(--muted); }
+    .item-dates { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .bullets { margin: 8px 0 0 18px; padding:0; }
+    .bullets li { margin: 4px 0; }
+
+    @media print {
+      .page { width: auto; margin: 0; box-shadow: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>{{ data.name }}</h1>
+      {% if data.role %}<div class="role">{{ data.role }}</div>{% endif %}
+      {% if data.summary %}<p class="summary">{{ data.summary }}</p>{% endif %}
+    </header>
+
+    {% if data.skills and data.skills|length > 0 %}
+    <section class="sec">
+      <h2>Skills</h2>
+      <div class="chips">
+        {% for s in data.skills %}
+          <span class="chip">{{ s }}</span>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if data.experiences and data.experiences|length > 0 %}
+    <section class="sec">
+      <h2>Experience</h2>
+      {% for e in data.experiences %}
+        <div class="item">
+          <div class="item-head">
+            <div>
+              {% if e.role %}<div class="item-title">{{ e.role }}</div>{% endif %}
+              {% if e.company %}<div class="item-sub">{{ e.company }}</div>{% endif %}
+            </div>
+            {% if e.dates %}<div class="item-dates">{{ e.dates }}</div>{% endif %}
+          </div>
+
+          {% if e.desc %}
+            <ul class="bullets">
+              {# split multiline desc into bullet points #}
+              {% for line in e.desc.split('\n') %}
+                {% set trimmed = line.strip() %}
+                {% if trimmed %}<li>{{ trimmed }}</li>{% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if data.education and data.education|length > 0 %}
+    <section class="sec">
+      <h2>Education</h2>
+      {% for ed in data.education %}
+        <div class="item">
+          <div class="item-head">
+            <div>
+              {% if ed.degree %}<div class="item-title">{{ ed.degree }}</div>{% endif %}
+              {% if ed.school %}<div class="item-sub">{{ ed.school }}</div>{% endif %}
+            </div>
+            {% if ed.dates %}<div class="item-dates">{{ ed.dates }}</div>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+  </div>
+</body>
+</html>

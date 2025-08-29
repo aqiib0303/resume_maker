@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ data.name }} - Resume</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 800px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 40px 30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .header p {
+            margin: 5px 0 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+        h2 {
+            color: #6a11cb;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        p, li {
+            line-height: 1.6;
+        }
+        ul {
+            list-style: square;
+            padding-left: 20px;
+        }
+
+        /* Experience timeline */
+        .experience {
+            position: relative;
+            padding-left: 20px;
+            border-left: 3px solid #6a11cb;
+        }
+        .experience-item {
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+        .experience-item b {
+            color: #2575fc;
+        }
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            background: #6a11cb;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            margin-top: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f0f0f0;
+            padding: 15px 30px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>{{ data.name }}</h1>
+        <p>{{ data.role }}</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2>Summary</h2>
+        <p>{{ data.summary }}</p>
+
+        <h2>Skills</h2>
+        <ul>
+            {% for s in data.skills %}
+                <li>{{ s }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Experience</h2>
+        <div class="experience">
+            {% for exp in data.experiences %}
+            <div class="experience-item">
+                <p><b>{{ exp.role }}</b> - {{ exp.company }} <span style="color:#777">({{ exp.dates }})</span></p>
+                <p>{{ exp.desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Generated with ❤️ | {{ data.name }}
+    </div>
+</div>
+</body>
+</html>

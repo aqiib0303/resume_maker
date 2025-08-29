@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto p-10">
+    <h2 class="text-3xl font-bold mb-10 text-center text-gray-800">Choose Your Resume Template</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        
+        <!-- Modern -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/modern.png') }}" 
+                 alt="Modern Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">Modern</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    A clean and modern design with professional fonts and easy readability. Perfect for tech and corporate jobs.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='modern') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=modern" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Minimal -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/minimal.png') }}" 
+                 alt="Minimal Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">Minimal</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Simple, clean, and professional. Great for freshers and people who want a clutter-free resume.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='minimal') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=minimal" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creative -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/creative.png') }}" 
+                 alt="Creative Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">Creative</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Stylish and unique design with colors and sections that stand out. Perfect for designers, writers, and creative roles.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='creative') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=creative" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATS-Friendly -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/ats_friendly.png') }}" 
+                 alt="ATS-Friendly Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">ATS-Friendly</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Optimized for Applicant Tracking Systems (ATS) with structured formatting. Ideal for corporate & MNC applications.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='ats_friendly') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=ats_friendly" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/premium modern pro.png') }}" 
+                 alt="Professional Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">premium_modern_pro</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Formal and structured layout designed for senior roles, management, and professional industries.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='premium_modern_pro') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=premium_modern_pro" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Elegant -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition">
+            <img src="{{ url_for('static', filename='images/templates/elegant.png') }}" 
+                 alt="Elegant Resume Template" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xl font-bold text-gray-900">Elegant</h3>
+                    <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">Free</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    A minimal yet elegant template with classy fonts and structured sections. Perfect for job seekers across industries.
+                </p>
+                <div class="flex justify-between">
+                    <a href="{{ url_for('preview', style='elegant') }}" 
+                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Preview</a>
+                    <a href="{{ url_for('builder') }}?style=elegant" 
+                       class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Use Template</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

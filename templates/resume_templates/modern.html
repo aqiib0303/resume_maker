@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ data.name }} - Resume</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafc;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #2c3e50;
+    }
+
+    header p {
+      margin: 5px 0;
+      font-size: 1.1rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    /* Section Titles */
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 30px;
+      margin-bottom: 12px;
+      color: #3498db;
+      border-bottom: 2px solid #e6e9ef;
+      padding-bottom: 5px;
+    }
+
+    /* Lists */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul li {
+      background: #f1f7ff;
+      margin: 6px 0;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* Experience & Education */
+    .item {
+      margin-bottom: 20px;
+    }
+
+    .item strong {
+      color: #2c3e50;
+      font-size: 1.05rem;
+    }
+
+    .item span {
+      float: right;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .desc {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>{{ data.name }}</h1>
+      <p>{{ data.role }}</p>
+      <p>{{ data.summary }}</p>
+    </header>
+
+    <!-- Skills -->
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        {% for s in data.skills %}
+          <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <!-- Experience -->
+    <section>
+      <h2>Experience</h2>
+      {% for exp in data.experiences %}
+      <div class="item">
+        <p>
+          <strong>{{ exp.role }}</strong> - {{ exp.company }}
+          <span>{{ exp.dates }}</span>
+        </p>
+        <p class="desc">{{ exp.desc }}</p>
+      </div>
+      {% endfor %}
+    </section>
+
+    <!-- Education -->
+    <section>
+      <h2>Education</h2>
+      {% for edu in data.education %}
+      <div class="item">
+        <p>
+          <strong>{{ edu.degree }}</strong> - {{ edu.school }}
+          <span>{{ edu.dates }}</span>
+        </p>
+      </div>
+      {% endfor %}
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© {{ data.name }} | Resume</p>
+    </footer>
+  </div>
+</body>
+</html>
+
