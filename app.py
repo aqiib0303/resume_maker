@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
-import pdfkit
 import os
-os.makedirs("instance", exist_ok=True)
+from weasyprint import HTML   # ✅ switched to WeasyPrint
 
 # ==================
 # CONFIG
@@ -105,9 +104,6 @@ def logout():
 # ==================
 # RESUME ROUTES
 # ==================
-WKHTMLTOPDF_PATH = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-PDF_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
-
 TEMPLATES = {
     "modern": {"name": "Modern Resume", "premium": False},
     "minimal": {"name": "Minimal Resume", "premium": False},
@@ -182,7 +178,9 @@ def download(style):
         abort(404, "Template not found")
     data = build_payload(request.form)
     html = render_template(f"resume_templates/{style}.html", data=data)
-    pdf = pdfkit.from_string(html, False, configuration=PDF_CONFIG)
+
+    # ✅ Generate PDF using WeasyPrint
+    pdf = HTML(string=html).write_pdf()
 
     filename = f"{data['name'].replace(' ', '_')}_{style}_resume.pdf"
     response = make_response(pdf)
@@ -218,3 +216,4 @@ def too_large(e):
 # ==================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
