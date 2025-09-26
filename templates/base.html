@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>{% block title %}AI Resume Maker | ResumeForge{% endblock %}</title>
     
     <!-- SEO Meta Tags -->
@@ -21,6 +21,14 @@
         .no-print { display: none !important; }
         .page { box-shadow: none !important; margin: 0 !important; }
       }
+
+      /* ✅ Mobile-first full width */
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
     </style>
   </head>
   <body class="bg-slate-50 text-slate-900">
@@ -32,33 +40,26 @@
         
         <!-- Navigation -->
         <nav class="flex items-center gap-6 text-sm">
-<a href="{{ url_for('builder') }}" class="hover:text-indigo-600 transition">Builder</a>
-<a href="{{ url_for('blog') }}" class="hover:text-indigo-600 transition">Blog</a>
-<a href="{{ url_for('contact') }}" class="hover:text-indigo-600 transition">Contact Us</a>
-<a href="{{ url_for('index') }}" class="font-bold text-xl">Resume<span class="text-indigo-600">Forge</span></a>
-
-          <!-- WhatsApp Contact -->
-          <a href="https://wa.me/03033481826" target="_blank" 
-             class="flex items-center gap-1 text-green-600 hover:text-green-700 font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="w-4 h-4">
-              <path d="M13.601 2.326A7.854 7.854 0 0 0 8.004.004a7.958 7.958 0 0 0-6.89 11.866L.002 16l4.24-1.11a7.965 7.965 0 0 0 3.762.96h.003a7.954 7.954 0 0 0 7.593-10.524zm-5.6 11.658a6.566 6.566 0 0 1-3.356-.92l-.24-.144-2.516.658.67-2.453-.156-.252a6.562 6.562 0 1 1 12.124-3.457 6.568 6.568 0 0 1-6.526 6.568zm3.601-4.935c-.196-.098-1.162-.574-1.342-.64-.18-.066-.312-.098-.444.098-.132.196-.51.64-.624.772-.114.132-.228.148-.424.05-.196-.098-.828-.305-1.577-.972a5.892 5.892 0 0 1-1.092-1.355c-.114-.196-.012-.302.086-.4.088-.088.196-.228.294-.342.098-.114.132-.196.196-.328.066-.132.032-.246-.016-.344-.048-.098-.444-1.07-.61-1.464-.16-.384-.324-.332-.444-.338l-.38-.007c-.132 0-.344.05-.524.246-.18.196-.688.672-.688 1.64s.704 1.9.804 2.03c.098.132 1.392 2.124 3.38 2.977.472.204.84.326 1.127.418.474.15.906.128 1.248.078.38-.058 1.162-.474 1.326-.93.164-.456.164-.85.114-.93-.048-.08-.18-.128-.376-.226z"/>
-            </svg>
-            WhatsApp
-          </a>
+          <a href="{{ url_for('builder') }}" class="hover:text-indigo-600 transition">Builder</a>
+          {% if session.get('user_id') %}
+            <a href="{{ url_for('logout') }}" class="hover:text-indigo-600 transition">Logout</a>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="hover:text-indigo-600 transition">Login</a>
+            <a href="{{ url_for('signup') }}" class="hover:text-indigo-600 transition">Signup</a>
+          {% endif %}
         </nav>
       </div>
     </header>
 
     <!-- Main -->
-    <main class="min-h-screen">
+    <main class="min-h-screen w-full">
       {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
     <footer class="no-print border-t bg-white">
-      <div class="mx-auto max-w-6xl px-4 py-6 text-xs text-slate-500 flex justify-between items-center">
-        <span>© {{ 2025 }} ResumeForge — ATS-friendly by default.</span>
-        <a href="/contact" class="hover:text-indigo-600">Contact Us</a>
+      <div class="mx-auto max-w-6xl px-4 py-6 text-xs text-slate-500 flex justify-center">
+        <span>© {{ 2025 }} ResumeForge — ATS-friendly resumes by default.</span>
       </div>
     </footer>
   </body>
