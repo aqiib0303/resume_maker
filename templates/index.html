@@ -3,11 +3,17 @@
 {% block content %}
 
 <!-- Navbar -->
-<header class="flex justify-between items-center px-6 py-4 shadow">
+<header class="flex justify-between items-center px-6 py-4 shadow bg-white">
   <a href="{{ url_for('index') }}" class="text-xl font-bold text-indigo-600">AI Resume Maker</a>
   <nav class="flex gap-4">
-    <a href="{{ url_for('login') }}" class="text-slate-700 hover:text-indigo-600">Login</a>
-    <a href="{{ url_for('signup') }}" class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Signup</a>
+    <a href="{{ url_for('login') }}" 
+       class="px-4 py-2 rounded-xl text-slate-700 hover:text-indigo-600 transition-colors">
+       Login
+    </a>
+    <a href="{{ url_for('signup') }}" 
+       class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+       Signup
+    </a>
   </nav>
 </header>
 
@@ -17,18 +23,19 @@
     <h1 class="text-4xl font-bold leading-tight">
       Build a <span class="text-indigo-600">Free ATS-Friendly Resume</span> in Minutes
     </h1>
-    <p class="mt-4 text-slate-600">
-      Create a professional, modern, and job-winning resume. Choose from <strong>ATS-friendly resume templates</strong>, 
-      switch styles instantly, and export your resume to PDF with one click.
+    <p class="mt-4 text-slate-600 text-lg">
+      Create a professional, modern, and job-winning resume. Choose from 
+      <strong>ATS-friendly resume templates</strong>, switch styles instantly, 
+      and export your resume to PDF with one click.
     </p>
-    <div class="mt-8 flex gap-4">
+    <div class="mt-8 flex flex-wrap gap-4">
       <a href="{{ url_for('form') }}"
-         class="inline-block rounded-2xl bg-indigo-600 px-6 py-3 text-white font-medium shadow hover:bg-indigo-700">
-        Start Building Resume
+         class="inline-block rounded-2xl bg-indigo-600 px-6 py-3 text-white font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+        🚀 Start Building Resume
       </a>
       <a href="{{ url_for('preview_templates') }}"
-         class="inline-block rounded-2xl px-6 py-3 border border-slate-300 text-slate-700 hover:bg-slate-100">
-         Browse Resume Templates
+         class="inline-block rounded-2xl px-6 py-3 border border-slate-300 text-slate-700 font-medium shadow-sm hover:bg-slate-100 hover:scale-105 transition-transform">
+         🎨 Browse Resume Templates
       </a>
     </div>
   </div>
@@ -56,70 +63,76 @@
     Choose From Our <span class="text-indigo-600">Professional Resume Templates</span>
   </h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
+    
     <!-- Minimal Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/minimal.PNG') }}" 
-           alt="Minimal Resume Template - Clean and Simple" class="rounded-lg mb-4">
+           alt="Minimal Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">Minimal Resume Template</h3>
       <p class="text-sm text-slate-600 mb-4">A clean and simple resume design perfect for professionals applying to modern workplaces.</p>
-      <a href="{{ url_for('form', style='minimal') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='minimal') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
     <!-- ATS-Friendly Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/ats_friendly.PNG') }}" 
-           alt="ATS-Friendly Resume Template for Job Applications" class="rounded-lg mb-4">
+           alt="ATS-Friendly Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">ATS-Friendly Resume Template</h3>
       <p class="text-sm text-slate-600 mb-4">Optimized for Applicant Tracking Systems to help your resume pass automated filters.</p>
-      <a href="{{ url_for('form', style='ats_friendly') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='ats_friendly') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
     <!-- Modern Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/modern.PNG') }}" 
-           alt="Modern Resume Template PDF" class="rounded-lg mb-4">
+           alt="Modern Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">Modern Resume Template</h3>
       <p class="text-sm text-slate-600 mb-4">Stylish and professional design that highlights skills and experience clearly.</p>
-      <a href="{{ url_for('form', style='modern') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='modern') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
     <!-- Creative Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/creative.PNG') }}" 
-           alt="Creative Resume Template Design" class="rounded-lg mb-4">
+           alt="Creative Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">Creative Resume Template</h3>
       <p class="text-sm text-slate-600 mb-4">Best for designers, marketers, and creators looking to stand out with unique layouts.</p>
-      <a href="{{ url_for('form', style='creative') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='creative') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
-    <!-- EDS Modern Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <!-- ATS Modern Template -->
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/ats_modern.PNG') }}" 
-           alt="ATS Modern Resume Template - Professional CV" class="rounded-lg mb-4">
+           alt="ATS Modern Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">ATS Modern Resume Template</h3>
       <p class="text-sm text-slate-600 mb-4">A sleek professional resume template trusted by job seekers worldwide.</p>
-      <a href="{{ url_for('form', style='eds_modern') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='eds_modern') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
     <!-- Premium Modern Pro Template -->
-    <div class="bg-white shadow rounded-2xl p-6">
+    <div class="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition-shadow">
       <img src="{{ url_for('static', filename='images/templates/premium modern pro.PNG') }}" 
-           alt="Premium Modern Pro Resume Template Download" class="rounded-lg mb-4">
+           alt="Premium Modern Pro Resume Template" class="rounded-lg mb-4">
       <h3 class="text-xl font-semibold">Premium Modern Pro Resume</h3>
       <p class="text-sm text-slate-600 mb-4">Exclusive design with advanced styling — perfect for senior roles and professionals.</p>
-      <a href="{{ url_for('form', style='premium_modern_pro') }}" class="block text-center rounded-lg bg-indigo-600 text-white py-2 hover:bg-indigo-700">
-        Edit This Template
+      <a href="{{ url_for('form', style='premium_modern_pro') }}" 
+         class="block text-center rounded-xl bg-indigo-600 text-white py-2.5 font-medium shadow hover:bg-indigo-700 hover:scale-105 transition-transform">
+         ✏️ Edit This Template
       </a>
     </div>
 
