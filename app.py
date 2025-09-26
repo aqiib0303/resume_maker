@@ -151,7 +151,7 @@ def build_payload(form):
 def builder():
     return render_template("resume/builder.html")
 
-# ✅ Added this so url_for('form') works
+# ✅ Shortcut for builder
 @app.route("/form")
 def form():
     return redirect(url_for("builder"))
@@ -192,17 +192,6 @@ def download(style):
 def preview_templates():
     return render_template("resume/preview_templates.html", templates=TEMPLATES)
 
-
-# ==================
-# BLOG & CONTACT (global pages)
-# ==================
-@app.route("/blog")
-def blog():
-    return render_template("blog.html")
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
 
 # ==================
 # ERROR HANDLER
