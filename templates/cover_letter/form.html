@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+  <h2>Create Your Cover Letter</h2>
+
+  <form method="POST" action="{{ url_for('cover_letter') }}">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" name="name" required>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="text" name="phone">
+    </div>
+
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" name="location" placeholder="City, Country">
+    </div>
+
+    <div class="form-group">
+      <label>Company</label>
+      <input type="text" name="company" required>
+    </div>
+
+    <div class="form-group">
+      <label>Hiring Manager</label>
+      <input type="text" name="hiring_manager" placeholder="Hiring Manager">
+    </div>
+
+    <div class="form-group">
+      <label>Position</label>
+      <input type="text" name="position" required>
+    </div>
+
+    <div class="form-group">
+      <label>Date</label>
+      <input type="text" name="date" placeholder="e.g. September 28, 2025">
+    </div>
+
+    <div class="form-group">
+      <label>Intro Paragraph</label>
+      <textarea name="intro" rows="4" placeholder="Start with a strong opening..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Skills & Experience Paragraph</label>
+      <textarea name="skills" rows="4" placeholder="Highlight relevant skills and achievements..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Highlight Section (optional)</label>
+      <textarea name="highlight" rows="3" placeholder="Add a highlighted statement to stand out..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Closing Paragraph</label>
+      <textarea name="closing" rows="3" placeholder="Wrap up with enthusiasm..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Choose Style</label>
+      <select name="style">
+        {% for key, template in templates.items() %}
+          <option value="{{ key }}">{{ template.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn-submit">Preview Cover Letter</button>
+  </form>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    padding: 20px;
+  }
+  .form-container {
+    max-width: 720px;
+    margin: auto;
+    background: #fff;
+    padding: 42px;
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+    animation: fadeIn .8s ease;
+  }
+  .form-container h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 32px;
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    background: #fafafa;
+    transition: all .25s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0,123,255,0.15);
+    outline: none;
+    background: #fff;
+  }
+  textarea { resize: none; }
+
+  .btn-submit {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg,#007bff,#6610f2);
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: all .25s;
+  }
+  .btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width:640px) {
+    .form-container { padding: 24px; }
+  }
+</style>
+{% endblock %}

@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
 from weasyprint import HTML   # ✅ switched to WeasyPrint
+from datetime import datetime
 
 # ==================
 # CONFIG
@@ -151,7 +152,6 @@ def build_payload(form):
 def builder():
     return render_template("resume/builder.html")
 
-# ✅ Shortcut for builder
 @app.route("/form")
 def form():
     return redirect(url_for("builder"))
@@ -159,9 +159,8 @@ def form():
 @app.route("/resume/render/<template_name>", methods=["POST"])
 def render_resume(template_name):
     data = build_payload(request.form)
-    allowed_templates = ["modern.html", "classic.html", "minimal.html",
-                         "ats_modern", "premium_modern_pro.html", "ats_friendly"]
-    if f"{template_name}.html" not in allowed_templates:
+    allowed_templates = list(TEMPLATES.keys())
+    if template_name not in allowed_templates:
         return "Template not found", 404
     return render_template(f"resume_templates/{template_name}.html", data=data)
 
@@ -180,7 +179,7 @@ def download(style):
     html = render_template(f"resume_templates/{style}.html", data=data)
 
     # ✅ Generate PDF using WeasyPrint
-    pdf = HTML(string=html).write_pdf()
+    pdf = HTML(string=html, base_url=app.static_folder).write_pdf()
 
     filename = f"{data['name'].replace(' ', '_')}_{style}_resume.pdf"
     response = make_response(pdf)
@@ -192,6 +191,55 @@ def download(style):
 def preview_templates():
     return render_template("resume/preview_templates.html", templates=TEMPLATES)
 
+# ==================
+# COVER LETTER ROUTES
+# ==================
+COVER_LETTER_TEMPLATES = {
+    "classic": {"name": "Classic Cover Letter"},
+    "modern": {"name": "Modern Cover Letter"},
+    "creative": {"name": "Creative Cover Letter"},
+}
+
+@app.route("/cover_letter", methods=["GET", "POST"])
+def cover_letter():
+    if request.method == "POST":
+        data = {
+            "name": request.form.get("name", "").strip(),
+            "email": request.form.get("email", "").strip(),
+            "phone": request.form.get("phone", "").strip(),
+            "company": request.form.get("company", "").strip(),
+            "hiring_manager": request.form.get("hiring_manager", "Hiring Manager").strip(),
+            "position": request.form.get("position", "").strip(),
+            "intro": request.form.get("intro", "").strip(),
+            "skills": request.form.get("skills", "").strip(),
+            "closing": request.form.get("closing", "").strip(),
+            "style": request.form.get("style", "classic"),
+            "date": datetime.now().strftime("%B %d, %Y"),
+        }
+
+        if not data["name"] or not data["company"] or not data["position"]:
+            flash("Name, company, and position are required.", "error")
+            return redirect(url_for("cover_letter"))
+
+        return render_template(f"cover_letter/{data['style']}.html", data=data, is_pdf=False)
+
+    return render_template("cover_letter/form.html", templates=COVER_LETTER_TEMPLATES)
+
+@app.route("/cover_letter/download", methods=["POST"])
+def cover_letter_download():
+    data = dict(request.form)
+    data.setdefault("date", datetime.now().strftime("%B %d, %Y"))
+    style = data.get("style", "classic")
+    data["is_pdf"] = True
+
+    html = render_template(f"cover_letter/{style}.html", data=data)
+    pdf = HTML(string=html, base_url=app.static_folder).write_pdf()
+
+    filename = f"{data.get('name','resume').replace(' ', '_')}_cover_letter.pdf"
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    return response
 
 # ==================
 # ERROR HANDLER
@@ -205,4 +253,3 @@ def too_large(e):
 # ==================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
