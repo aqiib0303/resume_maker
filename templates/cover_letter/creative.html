@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ data.name }} — Cover Letter</title>
+  <style>
+    @page { size:A4; margin:20mm; }
+    html,body {
+      margin:0; padding:0;
+      background:#f5f7fa;
+      font-family:'Segoe UI', Helvetica, Arial, sans-serif;
+      color:#2c2c2c;
+    }
+
+    .sheet {
+      max-width:780px;
+      margin:28px auto;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.08);
+      overflow:hidden;
+    }
+
+    /* Header */
+    .header {
+      background:linear-gradient(135deg,#0b57d0,#5a2fc2);
+      color:#fff;
+      padding:28px 36px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+    .name-block { flex:1; }
+    .name { font-size:30px; margin:0; font-weight:700; }
+    .job-title { opacity:0.95; margin-top:6px; }
+    .contact { text-align:right; font-size:13px; line-height:1.5; }
+
+    /* Content */
+    .content { padding:32px 42px; }
+    .meta {
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+    .subject {
+      color:#0b57d0;
+      font-weight:700;
+      margin-bottom:14px;
+    }
+    .letter {
+      font-size:16px;
+      line-height:1.8;
+    }
+    .letter p:first-of-type::first-letter {
+      float:left;
+      font-size:46px;
+      line-height:40px;
+      padding-right:8px;
+      font-weight:700;
+      color:#0b57d0;
+      font-family:Georgia, serif;
+      margin-top:4px;
+    }
+    .highlight {
+      margin:16px 0;
+      padding:14px;
+      border-radius:6px;
+      background:#f0f6ff;
+      border-left:4px solid #5a2fc2;
+    }
+
+    /* Signature */
+    .signature { margin-top:30px; }
+    .sig-name { font-weight:700; color:#5a2fc2; font-size:18px; }
+    .sig-title { color:#777; font-size:14px; }
+
+    /* Download button */
+    .actions { margin-top:28px; text-align:center; }
+    .btn-download {
+      display:inline-block;
+      background:linear-gradient(135deg,#007bff 0%,#6610f2 100%);
+      color:#fff;
+      padding:12px 22px;
+      border-radius:10px;
+      font-weight:700;
+      text-decoration:none;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 8px 22px rgba(6, 24, 58, 0.12);
+      transition:transform 160ms ease, box-shadow 160ms ease;
+      font-family:"Segoe UI", Tahoma, sans-serif;
+    }
+    .btn-download:hover {
+      transform:translateY(-3px);
+      box-shadow:0 14px 36px rgba(6,24,58,0.18);
+    }
+
+    /* Responsive */
+    @media (max-width:640px) {
+      .header { flex-direction:column; text-align:center; }
+      .contact { text-align:center; }
+      .content { padding:20px; }
+      .name { font-size:24px; }
+    }
+
+    /* Hide button in PDF */
+    @media print {
+      .actions { display:none !important; }
+      body { background:#fff; }
+      .sheet { box-shadow:none; border-radius:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <!-- Header -->
+    <div class="header">
+      <div class="name-block">
+        <h1 class="name">{{ data.name }}</h1>
+        {% if data.title %}<div class="job-title">{{ data.title }}</div>{% endif %}
+      </div>
+      <div class="contact">
+        <div>{{ data.email }}</div>
+        <div>{{ data.phone }}</div>
+        {% if data.location %}<div>{{ data.location }}</div>{% endif %}
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="content">
+      <div class="meta">
+        <div class="recipient">
+          <div>{{ data.hiring_manager | default('Hiring Manager') }}</div>
+          <div><strong>{{ data.company }}</strong></div>
+        </div>
+        <div class="date">{{ data.date if data.date else "" }}</div>
+      </div>
+
+      <div class="subject">Application for {{ data.position }}</div>
+
+      <div class="letter">
+        <p>{{ data.intro }}</p>
+        {% if data.highlight %}<div class="highlight">{{ data.highlight }}</div>{% endif %}
+        <p>{{ data.skills }}</p>
+        <p>{{ data.closing }}</p>
+      </div>
+
+      <!-- Signature -->
+      <div class="signature">
+        <div class="sig-name">{{ data.name }}</div>
+        {% if data.title %}<div class="sig-title">{{ data.title }}</div>{% endif %}
+      </div>
+
+      <!-- Download button (only in web, requires token) -->
+      {% if not is_pdf and token %}
+      <div class="actions">
+        <form method="POST" action="{{ url_for('cover_letter_download', token=token) }}">
+          {% for key, value in data.items() %}
+            <input type="hidden" name="{{ key }}" value="{{ value|e }}">
+          {% endfor %}
+          <button type="submit" class="btn-download">📥 Download PDF</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

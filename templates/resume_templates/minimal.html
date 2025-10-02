@@ -1,139 +1,171 @@
+<!-- templates/resume_templates/modern.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>{{ data.name }} - Resume</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f6f9;
-            color: #333;
-        }
+  <meta charset="utf-8">
+  <title>{{ (data.name if data and data.name is defined else "Your Name") }} - Resume</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
 
-        header {
-            text-align: center;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
+    header {
+      text-align: center;
+      border-bottom: 3px solid #007bff;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
 
-        header h1 {
-            font-size: 32px;
-            margin: 0;
-            color: #007bff;
-        }
+    header h1 {
+      font-size: 32px;
+      margin: 0;
+      color: #007bff;
+    }
 
-        header p {
-            font-size: 18px;
-            color: #666;
-        }
+    header p {
+      font-size: 18px;
+      color: #666;
+    }
 
-        section {
-            margin-bottom: 30px;
-        }
+    section {
+      margin-bottom: 30px;
+    }
 
-        section h2 {
-            font-size: 22px;
-            color: #007bff;
-            margin-bottom: 12px;
-            border-left: 4px solid #007bff;
-            padding-left: 10px;
-        }
+    section h2 {
+      font-size: 22px;
+      color: #007bff;
+      margin-bottom: 12px;
+      border-left: 4px solid #007bff;
+      padding-left: 10px;
+    }
 
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-        .skill {
-            background: #e9f3ff;
-            color: #007bff;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+    .skill {
+      background: #e9f3ff;
+      color: #007bff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
 
-        .card {
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
+    .card {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-left: 4px solid #007bff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
 
-        .card:hover {
-            background: #f0f8ff;
-            transform: translateX(5px);
-        }
+    .card:hover {
+      background: #f0f8ff;
+      transform: translateX(5px);
+    }
 
-        .card p {
-            margin: 5px 0;
-        }
+    .card p {
+      margin: 5px 0;
+    }
 
-        .summary {
-            background: #f9f9f9;
-            border-left: 4px solid #28a745;
-            padding: 15px;
-            border-radius: 10px;
-            font-style: italic;
-            margin-bottom: 25px;
-        }
-    </style>
+    .summary {
+      background: #f9f9f9;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      border-radius: 10px;
+      font-style: italic;
+      margin-bottom: 25px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>{{ data.name }}</h1>
-            <p>{{ data.role }}</p>
-        </header>
+  <div class="container" data-token="{{ token }}">
 
-        <div class="summary">
-            {{ data.summary }}
-        </div>
+    <!-- Header -->
+    <header>
+      <h1>{{ data.name if data and data.name is defined else "Your Name" }}</h1>
+      {% if data and data.role is defined and data.role %}
+        <p>{{ data.role }}</p>
+      {% endif %}
+    </header>
 
-        <section>
-            <h2>Skills</h2>
-            <div class="skills">
-                {% for skill in data.skills %}
-                    <span class="skill">{{ skill }}</span>
-                {% endfor %}
-            </div>
-        </section>
-
-        <section>
-            <h2>Experience</h2>
-            {% for exp in data.experiences %}
-                <div class="card">
-                    <p><strong>{{ exp.role }}</strong> @ {{ exp.company }}</p>
-                    <p><em>{{ exp.dates }}</em></p>
-                </div>
-            {% endfor %}
-        </section>
-
-        <section>
-            <h2>Education</h2>
-            {% for edu in data.education %}
-                <div class="card">
-                    <p><strong>{{ edu.degree }}</strong> @ {{ edu.school }}</p>
-                    <p><em>{{ edu.dates }}</em></p>
-                </div>
-            {% endfor %}
-        </section>
+    <!-- Summary -->
+    {% if data and data.summary is defined and data.summary %}
+    <div class="summary">
+      {{ data.summary }}
     </div>
+    {% endif %}
+
+    <!-- Skills -->
+    {% if data and data.skills is defined and data.skills %}
+    <section>
+      <h2>Skills</h2>
+      <div class="skills">
+        {% for skill in data.skills %}
+          {% if skill %}<span class="skill">{{ skill }}</span>{% endif %}
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Experience -->
+    {% if data and data.experiences is defined and data.experiences %}
+    <section>
+      <h2>Experience</h2>
+      {% for exp in data.experiences %}
+        {% set role = exp.role if exp and exp.role is defined else "" %}
+        {% set company = exp.company if exp and exp.company is defined else "" %}
+        {% set dates = exp.dates if exp and exp.dates is defined else "" %}
+        {% set desc = exp.desc if exp and exp.desc is defined else "" %}
+
+        {% if role or company or dates or desc %}
+        <div class="card">
+          {% if role %}<p><strong>{{ role }}</strong>{% if company %} @ {{ company }}{% endif %}</p>{% endif %}
+          {% if dates %}<p><em>{{ dates }}</em></p>{% endif %}
+          {% if desc %}<p>{{ desc }}</p>{% endif %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- Education -->
+    {% if data and data.education is defined and data.education %}
+    <section>
+      <h2>Education</h2>
+      {% for edu in data.education %}
+        {% set degree = edu.degree if edu and edu.degree is defined else "" %}
+        {% set school = edu.school if edu and edu.school is defined else "" %}
+        {% set dates = edu.dates if edu and edu.dates is defined else "" %}
+
+        {% if degree or school or dates %}
+        <div class="card">
+          {% if degree %}<p><strong>{{ degree }}</strong>{% if school %} @ {{ school }}{% endif %}</p>{% endif %}
+          {% if dates %}<p><em>{{ dates }}</em></p>{% endif %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+  </div>
 </body>
 </html>

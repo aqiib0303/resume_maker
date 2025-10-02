@@ -1,126 +1,148 @@
+<!-- templates/resume_templates/creative.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>{{ data.name }} - Resume</title>
-    <style>
-        body {
-            font-family: 'Trebuchet MS', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            width: 800px;
-            margin: 30px auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            padding: 40px 30px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2.2em;
-        }
-        .header p {
-            margin: 5px 0 0;
-            font-style: italic;
-            font-size: 1.2em;
-        }
+  <meta charset="utf-8">
+  <title>{{ (data.name if data and data.name is defined else "Your Name") }} - Resume</title>
+  <style>
+    body {
+      font-family: 'Trebuchet MS', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      width: 800px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      padding: 40px 30px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 2.2em;
+    }
+    .header p {
+      margin: 5px 0 0;
+      font-style: italic;
+      font-size: 1.2em;
+    }
 
-        .content {
-            padding: 30px;
-        }
-        h2 {
-            color: #6a11cb;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-        p, li {
-            line-height: 1.6;
-        }
-        ul {
-            list-style: square;
-            padding-left: 20px;
-        }
+    .content {
+      padding: 30px;
+    }
+    h2 {
+      color: #6a11cb;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+    p, li {
+      line-height: 1.6;
+    }
+    ul {
+      list-style: square;
+      padding-left: 20px;
+    }
 
-        /* Experience timeline */
-        .experience {
-            position: relative;
-            padding-left: 20px;
-            border-left: 3px solid #6a11cb;
-        }
-        .experience-item {
-            margin-bottom: 20px;
-            padding-left: 10px;
-        }
-        .experience-item b {
-            color: #2575fc;
-        }
-        .experience-item::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            background: #6a11cb;
-            border-radius: 50%;
-            width: 12px;
-            height: 12px;
-            margin-top: 6px;
-        }
+    /* Experience timeline */
+    .experience {
+      position: relative;
+      padding-left: 20px;
+      border-left: 3px solid #6a11cb;
+    }
+    .experience-item {
+      margin-bottom: 20px;
+      padding-left: 10px;
+      position: relative;
+    }
+    .experience-item b {
+      color: #2575fc;
+    }
+    .experience-item::before {
+      content: '';
+      position: absolute;
+      left: -16px;
+      background: #6a11cb;
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      margin-top: 6px;
+    }
 
-        /* Footer */
-        .footer {
-            background: #f0f0f0;
-            padding: 15px 30px;
-            font-size: 0.9em;
-            color: #666;
-            text-align: center;
-        }
-    </style>
+    /* Footer */
+    .footer {
+      background: #f0f0f0;
+      padding: 15px 30px;
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <h1>{{ data.name }}</h1>
-        <p>{{ data.role }}</p>
-    </div>
+<div class="container" data-token="{{ token }}">
+  
+  <!-- Header -->
+  <div class="header">
+    <h1>{{ data.name if data and data.name is defined else "Your Name" }}</h1>
+    {% if data and data.role is defined and data.role %}
+      <p>{{ data.role }}</p>
+    {% endif %}
+  </div>
 
-    <!-- Content -->
-    <div class="content">
-        <h2>Summary</h2>
-        <p>{{ data.summary }}</p>
+  <!-- Content -->
+  <div class="content">
+    {% if data and data.summary is defined and data.summary %}
+      <h2>Summary</h2>
+      <p>{{ data.summary }}</p>
+    {% endif %}
 
-        <h2>Skills</h2>
-        <ul>
-            {% for s in data.skills %}
-                <li>{{ s }}</li>
-            {% endfor %}
-        </ul>
+    {% if data and data.skills is defined and data.skills %}
+      <h2>Skills</h2>
+      <ul>
+        {% for s in data.skills %}
+          {% if s %}<li>{{ s }}</li>{% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
 
-        <h2>Experience</h2>
-        <div class="experience">
-            {% for exp in data.experiences %}
-            <div class="experience-item">
-                <p><b>{{ exp.role }}</b> - {{ exp.company }} <span style="color:#777">({{ exp.dates }})</span></p>
-                <p>{{ exp.desc }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% if data and data.experiences is defined and data.experiences %}
+      <h2>Experience</h2>
+      <div class="experience">
+        {% for exp in data.experiences %}
+          {% set role = exp.role if exp and exp.role is defined else "" %}
+          {% set company = exp.company if exp and exp.company is defined else "" %}
+          {% set dates = exp.dates if exp and exp.dates is defined else "" %}
+          {% set desc = exp.desc if exp and exp.desc is defined else "" %}
 
-    <!-- Footer -->
-    <div class="footer">
-        Generated with ❤️ | {{ data.name }}
-    </div>
+          {% if role or company or dates or desc %}
+          <div class="experience-item">
+            <p>
+              {% if role %}<b>{{ role }}</b>{% endif %}
+              {% if company %} - {{ company }}{% endif %}
+              {% if dates %} <span style="color:#777">({{ dates }})</span>{% endif %}
+            </p>
+            {% if desc %}<p>{{ desc }}</p>{% endif %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Generated with ❤️ | {{ data.name if data and data.name is defined else "Your Name" }}
+  </div>
 </div>
 </body>
 </html>

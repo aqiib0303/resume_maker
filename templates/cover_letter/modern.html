@@ -159,10 +159,10 @@
         {% if data.title %}<div class="sig-title">{{ data.title }}</div>{% endif %}
       </div>
 
-      <!-- Download button -->
-      {% if not is_pdf %}
+      <!-- Download button with token -->
+      {% if not is_pdf and token %}
       <div class="actions">
-        <form method="POST" action="{{ url_for('cover_letter_download') }}">
+        <form method="POST" action="{{ url_for('cover_letter_download', token=token) }}">
           {% for key, value in data.items() %}
             <input type="hidden" name="{{ key }}" value="{{ value|e }}">
           {% endfor %}

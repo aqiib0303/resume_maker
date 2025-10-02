@@ -2,8 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
-from weasyprint import HTML   # ✅ switched to WeasyPrint
+from weasyprint import HTML
 from datetime import datetime
+import uuid   # ✅ for tokens
 
 # ==================
 # CONFIG
@@ -20,7 +21,6 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-# Ensure table exists
 def init_db():
     conn = get_db()
     cur = conn.cursor()
@@ -36,6 +36,12 @@ def init_db():
     conn.close()
 
 init_db()
+
+# ==================
+# IN-MEMORY STORAGE FOR TOKENS
+# ==================
+resume_tokens = {}
+cover_letter_tokens = {}
 
 # ==================
 # MAIN ROUTE
@@ -115,13 +121,11 @@ TEMPLATES = {
 }
 
 def build_payload(form):
-    """Convert raw form into structured payload."""
     name = form.get("name", "").strip()
     role = form.get("role", "").strip()
     summary = form.get("summary", "").strip()
     skills = [s.strip() for s in form.getlist("skills[]") if s.strip()]
 
-    # Work Experience
     experiences = []
     for company, role, dates, desc in zip(
         form.getlist("exp_company[]"),
@@ -132,7 +136,6 @@ def build_payload(form):
         if company.strip() or role.strip() or dates.strip() or desc.strip():
             experiences.append({"company": company, "role": role, "dates": dates, "desc": desc})
 
-    # Education
     education = []
     for school, degree, dates in zip(
         form.getlist("edu_school[]"),
@@ -156,29 +159,28 @@ def builder():
 def form():
     return redirect(url_for("builder"))
 
-@app.route("/resume/render/<template_name>", methods=["POST"])
-def render_resume(template_name):
-    data = build_payload(request.form)
-    allowed_templates = list(TEMPLATES.keys())
-    if template_name not in allowed_templates:
-        return "Template not found", 404
-    return render_template(f"resume_templates/{template_name}.html", data=data)
-
 @app.route("/resume/preview/<style>", methods=["POST"])
 def preview(style):
     if style not in TEMPLATES:
         abort(404, "Template not found")
     data = build_payload(request.form)
-    return render_template(f"resume_templates/{style}.html", data=data)
 
-@app.route("/resume/download/<style>", methods=["POST"])
-def download(style):
-    if style not in TEMPLATES:
-        abort(404, "Template not found")
-    data = build_payload(request.form)
-    html = render_template(f"resume_templates/{style}.html", data=data)
+    # ✅ Generate token and save data
+    token = str(uuid.uuid4())
+    resume_tokens[token] = {"data": data, "style": style}
 
-    # ✅ Generate PDF using WeasyPrint
+    # Pass token so preview template can build proper GET link
+    return render_template(f"resume_templates/{style}.html", data=data, token=token, is_pdf=False)
+
+@app.route("/resume/download/<token>")
+def download(token):
+    entry = resume_tokens.get(token)
+    if not entry:
+        abort(404, "Invalid or expired token")
+    data = entry["data"]
+    style = entry["style"]
+
+    html = render_template(f"resume_templates/{style}.html", data=data, is_pdf=True)
     pdf = HTML(string=html, base_url=app.static_folder).write_pdf()
 
     filename = f"{data['name'].replace(' ', '_')}_{style}_resume.pdf"
@@ -221,25 +223,26 @@ def cover_letter():
             flash("Name, company, and position are required.", "error")
             return redirect(url_for("cover_letter"))
 
-        return render_template(f"cover_letter/{data['style']}.html", data=data, is_pdf=False)
+        token = str(uuid.uuid4())
+        cover_letter_tokens[token] = {"data": data, "style": data["style"]}
+
+        return render_template(f"cover_letter/{data['style']}.html", data=data, token=token, is_pdf=False)
 
     return render_template("cover_letter/form.html", templates=COVER_LETTER_TEMPLATES)
 
-@app.route("/cover_letter/download", methods=["POST"])
-def cover_letter_download():
-    data = dict(request.form)
-    data.setdefault("date", datetime.now().strftime("%B %d, %Y"))
-    style = data.get("style", "classic")
-    data["is_pdf"] = True
+@app.route("/cover_letter/download/<token>", methods=["POST"])
+def cover_letter_download(token):
+    data = request.form.to_dict()
+    html = render_template(f"cover_letter/{data['style']}.html", data=data, is_pdf=True)
 
-    html = render_template(f"cover_letter/{style}.html", data=data)
     pdf = HTML(string=html, base_url=app.static_folder).write_pdf()
 
-    filename = f"{data.get('name','resume').replace(' ', '_')}_cover_letter.pdf"
+    filename = f"{data.get('name','cover_letter')}_cover_letter.pdf"
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = f"attachment; filename={filename}"
     return response
+
 
 # ==================
 # ERROR HANDLER

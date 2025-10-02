@@ -4,264 +4,208 @@
 <head>
   <meta charset="utf-8" />
   <title>{{ (data.name if data and data.name is defined else "Your Name") ~ " - Resume" }}</title>
-  <!-- Web fonts (fallbacks included). If wkhtmltopdf blocks network, it will fallback to system fonts. -->
+  
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Lora:wght@400;600&family=Poppins:wght@300;500;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    /* ---------- CSS VARIABLES / THEME ---------- */
-    :root{
-      --accent: #4f46e5;         /* Indigo */
-      --ink: #0f172a;            /* Slate-900 */
-      --subtle: #64748b;         /* Slate-500 */
+    /* ---------- THEME VARIABLES ---------- */
+    :root {
+      --accent: #4f46e5;
+      --ink: #0f172a;
+      --subtle: #64748b;
       --paper: #ffffff;
       --line: #e2e8f0;
       --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      --scale: 1;                /* font scale */
-      --sidebar: 34%;            /* sidebar width */
+      --scale: 1;
+      --sidebar: 34%;
       --gap: 18px;
       --radius: 16px;
     }
 
-    /* ---------- PAGE / PRINT ---------- */
     @page {
       size: A4;
       margin: 18mm 14mm;
     }
+
     html, body {
+      margin: 0;
       background: #f1f5f9;
       color: var(--ink);
       font-family: var(--font);
-      line-height: 1.5;
-    }
-    body { margin: 24px; }
-    .page {
-      background: var(--paper);
-      max-width: 210mm; /* A4 width */
-      min-height: 297mm;
-      margin: 0 auto;
-      border-radius: var(--radius);
-      box-shadow: 0 20px 60px rgba(15, 23, 42, .12);
-      overflow: hidden;
-      position: relative;
+      line-height: 1.6;
     }
 
-    /* Hide controller in print/PDF */
+    .page {
+      background: var(--paper);
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+      overflow: hidden;
+    }
+
     @media print {
       body { background: var(--paper); margin: 0; }
       .page { box-shadow: none; border-radius: 0; }
       .controls { display: none !important; }
     }
 
-    /* ---------- HEADER ---------- */
+    /* Accent bar */
+    .accent {
+      height: 8px;
+      background: linear-gradient(90deg, var(--accent), #a78bfa);
+    }
+
+    /* Header */
     .header {
       display: grid;
       grid-template-columns: var(--sidebar) 1fr;
       gap: var(--gap);
-      padding: 28px 28px 0 28px;
+      padding: 28px;
     }
+
     .identity {
       display: flex;
       gap: 16px;
       align-items: center;
     }
+
     .avatar-wrap {
-      width: 92px; height: 92px;
-      border-radius: 9999px; overflow: hidden;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      overflow: hidden;
       border: 4px solid rgba(79,70,229,.15);
-      box-shadow: 0 6px 22px rgba(79, 70, 229, .18);
-      flex: 0 0 auto;
-      position: relative;
-      background: linear-gradient(145deg, #eef2ff, #ffffff);
-      display: grid; place-items: center;
+      box-shadow: 0 6px 22px rgba(79,70,229,.18);
+      display: grid;
+      place-items: center;
+      background: #eef2ff;
     }
-    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+    .avatar-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
     .avatar-initials {
-      font-weight: 800; color: var(--accent); font-size: 26px;
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 26px;
     }
+
     .name-role h1 {
       margin: 0;
       font-size: calc(28px * var(--scale));
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-    }
-    .name-role .role {
-      margin-top: 4px; color: var(--subtle); font-weight: 600;
-      font-size: calc(15px * var(--scale));
+      line-height: 1.2;
     }
 
-    /* ---------- CONTACT ---------- */
-    .contact {
-      display: flex; flex-wrap: wrap; gap: 10px 16px;
-      margin-top: 14px; color: var(--ink);
+    .name-role .role {
+      margin-top: 4px;
+      font-size: calc(15px * var(--scale));
+      font-weight: 600;
+      color: var(--subtle);
     }
-    .contact a, .contact span {
-      display: inline-flex; align-items: center; gap: 8px;
-      text-decoration: none; color: inherit; font-size: calc(12.5px * var(--scale));
-      padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px;
+
+    /* Contact */
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      margin-top: 14px;
+    }
+
+    .contact a {
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
       background: #fff;
     }
+
     .contact svg { width: 14px; height: 14px; }
 
-    /* ---------- BODY LAYOUT ---------- */
+    /* Body Layout */
     .body {
       display: grid;
       grid-template-columns: var(--sidebar) 1fr;
       gap: var(--gap);
-      padding: 24px 28px 28px 28px;
+      padding: 24px 28px;
     }
 
-    /* ---------- PANELS ---------- */
+    /* Panels */
     .panel {
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 16px 16px;
+      padding: 16px;
+      margin-bottom: 18px;
     }
+
     .panel h3 {
-      margin: 0 0 12px 0;
-      font-size: calc(14px * var(--scale));
+      margin: 0 0 10px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: .08em;
       color: var(--subtle);
       border-bottom: 1px dashed var(--line);
-      padding-bottom: 8px;
+      padding-bottom: 6px;
     }
 
-    .summary { font-size: calc(13.5px * var(--scale)); color: #0b1220; }
+    .summary { font-size: 13.5px; color: #0b1220; }
 
-    /* ---------- TAGS / SKILL PILLS ---------- */
-    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    /* Skills */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .tag {
-      font-size: calc(12.5px * var(--scale));
-      border-radius: 10px; padding: 6px 10px;
-      background: linear-gradient(180deg, rgba(79,70,229,.08), rgba(79,70,229,.03));
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(79,70,229,.08);
       border: 1px solid rgba(79,70,229,.22);
-      color: #1f2a44; font-weight: 600;
+      color: #1f2a44;
     }
 
-    /* ---------- EXPERIENCE ---------- */
+    /* Experience */
     .exp-item { margin-bottom: 14px; }
-    .exp-item:last-child { margin-bottom: 0; }
-    .exp-row {
-      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-    }
-    .exp-title { font-weight: 700; font-size: calc(14.5px * var(--scale)); }
+    .exp-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .exp-title { font-weight: 700; font-size: 14.5px; }
     .exp-company { color: var(--subtle); font-weight: 600; }
-    .exp-dates { color: var(--subtle); font-size: calc(12.5px * var(--scale)); }
-    .exp-desc { margin-top: 6px; font-size: calc(13px * var(--scale)); color: #0b1220; }
+    .exp-dates { font-size: 12.5px; color: var(--subtle); }
+    .exp-desc { margin-top: 6px; font-size: 13px; }
 
-    /* ---------- EDUCATION ---------- */
+    /* Education */
     .edu-item { margin-bottom: 12px; }
-    .edu-item:last-child { margin-bottom: 0; }
-    .edu-degree { font-weight: 700; font-size: calc(14px * var(--scale)); }
+    .edu-degree { font-weight: 700; font-size: 14px; }
     .edu-school { color: var(--subtle); font-weight: 600; }
-    .edu-dates { color: var(--subtle); font-size: calc(12.5px * var(--scale)); }
+    .edu-dates { font-size: 12.5px; color: var(--subtle); }
 
-    /* ---------- SECTION REORDER (drag) ---------- */
+    /* Drag handles */
     .section { cursor: move; }
-    .section.dragging { opacity: .5; }
-    .section-title {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; margin-bottom: 10px;
-    }
     .handle {
-      width: 16px; height: 16px; display: inline-block;
+      width: 16px; height: 16px;
       background: radial-gradient(var(--subtle) 2px, transparent 3px) 0 0/6px 6px;
       opacity: .5;
     }
-
-    /* ---------- ACCENT BAR ---------- */
-    .accent {
-      height: 8px;
-      background: linear-gradient(90deg, var(--accent), #a78bfa);
-      opacity: .9;
-    }
-
-    /* ---------- CONTROLS (Customizer) ---------- */
-    .controls {
-      position: fixed; right: 22px; top: 22px; z-index: 50;
-      width: 320px; max-height: 80vh; overflow: auto;
-      background: #ffffff; border: 1px solid var(--line); border-radius: 16px;
-      box-shadow: 0 18px 60px rgba(2,6,23,.18);
-    }
-    .controls header {
-      padding: 14px 14px; border-bottom: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .controls .content { padding: 12px 14px 16px 14px; display: grid; gap: 12px; }
-    .ctrl-row { display: grid; gap: 6px; }
-    .ctrl-row label { font-size: 12px; color: var(--subtle); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-    .ctrl-row input[type="range"] { width: 100%; }
-    .ctrl-row select, .ctrl-row input[type="color"], .ctrl-row input[type="file"], .ctrl-row input[type="checkbox"] {
-      padding: 10px; border-radius: 12px; border: 1px solid var(--line); font-size: 14px;
-    }
-    .toggle { display: inline-flex; align-items: center; gap: 10px; }
-
-    .mini-btn {
-      background: var(--accent); color: #fff; border: none; border-radius: 10px;
-      padding: 8px 12px; font-weight: 700; cursor: pointer;
-    }
-    .mini-btn.ghost {
-      background: transparent; color: var(--accent);
-      border: 1px solid rgba(79,70,229,.3);
-    }
-
   </style>
 </head>
 <body>
-
-  <!-- ===== CUSTOMIZER PANEL ===== -->
-  <aside class="controls" id="controls">
-    <header>
-      <strong>Customize Template</strong>
-      <button class="mini-btn ghost" type="button" onclick="document.getElementById('controls').style.display='none'">Hide</button>
-    </header>
-    <div class="content">
-      <div class="ctrl-row">
-        <label>Accent Color</label>
-        <input type="color" id="accentColor" value="#4f46e5" />
-      </div>
-      <div class="ctrl-row">
-        <label>Font Family</label>
-        <select id="fontFamily">
-          <option value='"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'>Inter (Default)</option>
-          <option value='"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'>Poppins</option>
-          <option value='"Lora",Georgia,serif'>Lora</option>
-          <option value='"Roboto Mono","Courier New",monospace'>Roboto Mono</option>
-        </select>
-      </div>
-      <div class="ctrl-row">
-        <label>Font Size Scale</label>
-        <input type="range" id="fontScale" min="0.9" max="1.2" step="0.01" value="1" />
-      </div>
-      <div class="ctrl-row">
-        <label>Sidebar Width (%)</label>
-        <input type="range" id="sidebarWidth" min="28" max="42" step="1" value="34" />
-      </div>
-      <div class="ctrl-row toggle">
-        <input type="checkbox" id="compactToggle" />
-        <label for="compactToggle">Compact Spacing</label>
-      </div>
-      <div class="ctrl-row toggle">
-        <input type="checkbox" id="photoToggle" checked />
-        <label for="photoToggle">Show Photo</label>
-      </div>
-      <div class="ctrl-row">
-        <label>Upload Photo</label>
-        <input type="file" id="photoInput" accept="image/*" />
-      </div>
-      <div class="ctrl-row">
-        <button class="mini-btn" type="button" id="resetBtn">Reset</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ===== PAGE ===== -->
   <div class="page" id="page">
     <div class="accent"></div>
 
     <!-- HEADER -->
     <section class="header">
-      <!-- LEFT: Identity + Contact -->
       <div>
         <div class="identity">
           <div class="avatar-wrap" id="avatarWrap">
@@ -270,101 +214,37 @@
             <img id="avatarImg" alt="Profile photo"/>
             <div class="avatar-initials" id="avatarInitials">{{ initials|upper }}</div>
           </div>
-          <div class="summary">
-  {% if data and data.summary is defined and data.summary %}
-    {{ data.summary }}
-  {% else %}
-    Brief summary about your experience, core strengths and areas of expertise. Keep it concise and impact-oriented.
-  {% endif %}
-</div>
-
+          <div class="name-role">
+            <h1>{{ data.name if data and data.name is defined else "Your Name" }}</h1>
+            <div class="role">{{ data.role if data and data.role is defined else "Your Role" }}</div>
+          </div>
         </div>
 
-        <!-- CONTACT -->
-        <div class="contact" style="margin-top:16px">
-          {% set email = data.email if data is defined and data.email is defined else '' %}
-          {% set phone = data.phone if data is defined and data.phone is defined else '' %}
-          {% set linkedin = data.linkedin if data is defined and data.linkedin is defined else '' %}
-          {% set github = data.github if data is defined and data.github is defined else '' %}
-          {% set website = data.website if data is defined and data.website is defined else '' %}
-
-          {% if email %}
-          <a href="mailto:{{ email }}">
-            <!-- mail icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
-            <span>{{ email }}</span>
-          </a>
-          {% endif %}
-
-          {% if phone %}
-          <a href="tel:{{ phone | replace(' ','') }}">
-            <!-- phone icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.86.32 1.7.61 2.5a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.67-.28a2 2 0 0 1 2.11.45 12.29 12.29 0 0 0 2.5.61A2 2 0 0 1 22 16.92z"/></svg>
-            <span>{{ phone }}</span>
-          </a>
-          {% endif %}
-
-          {% if linkedin %}
-          <a href="{{ linkedin }}" target="_blank" rel="noopener">
-            <!-- LinkedIn -->
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 5 2.12 5 3.5zM.5 8h4V24h-4zM8 8h3.8v2.2h.1c.5-.9 1.8-2.2 3.7-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7.1c0-1.7 0-3.9-2.4-3.9-2.4 0-2.8 1.8-2.8 3.8V24H8z"/></svg>
-            <span>LinkedIn</span>
-          </a>
-          {% endif %}
-
-          {% if github %}
-          <a href="{{ github }}" target="_blank" rel="noopener">
-            <!-- GitHub -->
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.09-.75.08-.73.08-.73 1.21.09 1.85 1.25 1.85 1.25 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.66-.31-5.47-1.33-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.57.12-3.27 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0C17.4 6.1 18.41 6.42 18.41 6.42c.66 1.7.24 2.96.12 3.27.77.84 1.24 1.91 1.24 3.22 0 4.63-2.82 5.63-5.5 5.93.43.37.82 1.09.82 2.2v3.26c0 .32.22.7.82.58A12 12 0 0 0 12 .5z"/></svg>
-            <span>GitHub</span>
-          </a>
-          {% endif %}
-
-          {% if phone %}
-          <a href="https://wa.me/{{ phone | replace(' ','') }}" target="_blank" rel="noopener" title="WhatsApp">
-            <!-- WhatsApp -->
-            <svg viewBox="0 0 32 32" fill="currentColor"><path d="M19.11 17.33c-.27-.14-1.57-.77-1.82-.86-.24-.09-.42-.14-.6.14-.17.27-.69.86-.84 1.03-.15.17-.31.19-.58.07-.27-.14-1.11-.41-2.11-1.3-.78-.7-1.31-1.57-1.46-1.84-.15-.27-.02-.42.12-.56.12-.12.27-.31.41-.46.14-.15.19-.26.27-.43.09-.17.05-.32-.02-.46-.07-.14-.6-1.46-.82-2-.21-.49-.42-.42-.6-.43-.15-.01-.32-.01-.49-.01-.17 0-.46.07-.7.32-.24.24-.92.9-.92 2.21s.95 2.57 1.08 2.75c.14.17 1.86 2.84 4.51 3.98.63.27 1.12.43 1.5.55.63.2 1.2.17 1.65.1.5-.08 1.57-.64 1.79-1.26.22-.62.22-1.15.15-1.26-.06-.11-.24-.18-.51-.32z"/><path d="M26.02 5.98A13.99 13.99 0 0 0 1.57 19.63L0 26l6.52-1.71A13.98 13.98 0 1 0 26.02 5.98zm-12 23.03a11.98 11.98 0 0 1-6.1-1.68l-.44-.26-3.86 1.01 1.03-3.76-.28-.46A11.98 11.98 0 1 1 14.02 29z"/></svg>
-            <span>WhatsApp</span>
-          </a>
-          {% endif %}
-
-          {% if website %}
-          <a href="{{ website }}" target="_blank" rel="noopener">
-            <!-- globe -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-            <span>{{ website }}</span>
-          </a>
-          {% endif %}
+        <div class="contact">
+          {% if data.email %}<a href="mailto:{{ data.email }}">{{ data.email }}</a>{% endif %}
+          {% if data.phone %}<a href="tel:{{ data.phone }}">{{ data.phone }}</a>{% endif %}
+          {% if data.linkedin %}<a href="{{ data.linkedin }}">LinkedIn</a>{% endif %}
+          {% if data.github %}<a href="{{ data.github }}">GitHub</a>{% endif %}
+          {% if data.website %}<a href="{{ data.website }}">Website</a>{% endif %}
         </div>
       </div>
 
-      <!-- RIGHT: Summary -->
       <div class="panel">
         <h3>Professional Summary</h3>
         <div class="summary">
-  {% if data and data.summary is defined and data.summary %}
-    {{ data.summary }}
-  {% else %}
-    Brief summary about your experience, core strengths and areas of expertise. Keep it concise and impact-oriented.
-  {% endif %}
-</div>
-
+          {{ data.summary if data and data.summary else "Brief summary about your experience, skills, and expertise." }}
+        </div>
       </div>
     </section>
 
     <!-- BODY -->
     <section class="body" id="sections">
-      <!-- LEFT SIDEBAR -->
       <div class="left">
-        {% set skills = data.skills if data and data.skills is defined and data.skills else [] %}
-        {% if skills|length > 0 %}
-        <div class="panel section" draggable="true" data-section="skills">
-          <div class="section-title">
-            <h3>Skills</h3>
-            <span class="handle" title="Drag to reorder"></span>
-          </div>
+        {% if data.skills %}
+        <div class="panel section" draggable="true">
+          <h3>Skills</h3>
           <div class="tags">
-            {% for s in skills %}
+            {% for s in data.skills %}
               <span class="tag">{{ s }}</span>
             {% endfor %}
           </div>
@@ -372,163 +252,39 @@
         {% endif %}
       </div>
 
-      <!-- RIGHT MAIN -->
       <div class="right">
-        {% set experiences = data.experiences if data and data.experiences is defined and data.experiences else [] %}
-        {% if experiences|length > 0 %}
-        <div class="panel section" draggable="true" data-section="experience">
-          <div class="section-title">
-            <h3>Experience</h3>
-            <span class="handle" title="Drag to reorder"></span>
-          </div>
-          {% for exp in experiences %}
-            {% set company = exp.company if exp.company is defined else "" %}
-            {% set role = exp.role if exp.role is defined else "" %}
-            {% set dates = exp.dates if exp.dates is defined else "" %}
-            {% set desc = exp.desc if exp.desc is defined else "" %}
-
-            {% if company or role or dates or desc %}
-            <div class="exp-item">
-              <div class="exp-row">
-                <div>
-                  <div class="exp-title">{{ role }}</div>
-                  <div class="exp-company">{{ company }}</div>
-                </div>
-                <div class="exp-dates">{{ dates }}</div>
+        {% if data.experiences %}
+        <div class="panel section" draggable="true">
+          <h3>Experience</h3>
+          {% for exp in data.experiences %}
+          <div class="exp-item">
+            <div class="exp-row">
+              <div>
+                <div class="exp-title">{{ exp.role }}</div>
+                <div class="exp-company">{{ exp.company }}</div>
               </div>
-              {% if desc %}<div class="exp-desc">{{ desc }}</div>{% endif %}
+              <div class="exp-dates">{{ exp.dates }}</div>
             </div>
-            {% endif %}
+            {% if exp.desc %}<div class="exp-desc">{{ exp.desc }}</div>{% endif %}
+          </div>
           {% endfor %}
         </div>
         {% endif %}
 
-        {% set education = data.education if data and data.education is defined and data.education else [] %}
-        {% if education|length > 0 %}
-        <div class="panel section" draggable="true" data-section="education">
-          <div class="section-title">
-            <h3>Education</h3>
-            <span class="handle" title="Drag to reorder"></span>
+        {% if data.education %}
+        <div class="panel section" draggable="true">
+          <h3>Education</h3>
+          {% for edu in data.education %}
+          <div class="edu-item">
+            <div class="edu-degree">{{ edu.degree }}</div>
+            <div class="edu-school">{{ edu.school }}</div>
+            <div class="edu-dates">{{ edu.dates }}</div>
           </div>
-          {% for edu in education %}
-            {% set school = edu.school if edu.school is defined else "" %}
-            {% set degree = edu.degree if edu.degree is defined else "" %}
-            {% set edates = edu.dates if edu.dates is defined else "" %}
-            {% if school or degree or edates %}
-            <div class="edu-item">
-              <div class="edu-degree">{{ degree }}</div>
-              <div class="edu-school">{{ school }}</div>
-              <div class="edu-dates">{{ edates }}</div>
-            </div>
-            {% endif %}
           {% endfor %}
         </div>
         {% endif %}
       </div>
     </section>
   </div>
-
-  <script>
-    // ===== THEME / CUSTOMIZER =====
-    const root = document.documentElement;
-    const controls = {
-      accent: document.getElementById('accentColor'),
-      font: document.getElementById('fontFamily'),
-      scale: document.getElementById('fontScale'),
-      sidebar: document.getElementById('sidebarWidth'),
-      compact: document.getElementById('compactToggle'),
-      photoToggle: document.getElementById('photoToggle'),
-      photoInput: document.getElementById('photoInput'),
-      reset: document.getElementById('resetBtn'),
-    };
-
-    const avatarWrap = document.getElementById('avatarWrap');
-    const avatarImg = document.getElementById('avatarImg');
-    const avatarInitials = document.getElementById('avatarInitials');
-
-    function setVar(name, value){ root.style.setProperty(name, value); }
-
-    controls.accent.addEventListener('input', e => {
-      setVar('--accent', e.target.value);
-      document.querySelector('.accent').style.background =
-        `linear-gradient(90deg, ${e.target.value}, #a78bfa)`;
-    });
-
-    controls.font.addEventListener('change', e => setVar('--font', e.target.value));
-    controls.scale.addEventListener('input', e => setVar('--scale', e.target.value));
-    controls.sidebar.addEventListener('input', e => setVar('--sidebar', e.target.value + '%'));
-
-    controls.compact.addEventListener('change', e => {
-      const gap = e.target.checked ? '12px' : '18px';
-      setVar('--gap', gap);
-    });
-
-    controls.photoToggle.addEventListener('change', e => {
-      avatarWrap.style.display = e.target.checked ? 'grid' : 'none';
-    });
-
-    controls.photoInput.addEventListener('change', e => {
-      const file = e.target.files?.[0];
-      if(!file) return;
-      const url = URL.createObjectURL(file);
-      avatarImg.src = url;
-      avatarImg.style.display = 'block';
-      avatarInitials.style.display = 'none';
-    });
-
-    controls.reset.addEventListener('click', () => {
-      controls.accent.value = '#4f46e5';
-      controls.font.value = '"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif';
-      controls.scale.value = '1';
-      controls.sidebar.value = '34';
-      controls.compact.checked = false;
-      controls.photoToggle.checked = true;
-      avatarImg.src = ''; avatarImg.style.display = 'none'; avatarInitials.style.display = 'block';
-
-      setVar('--accent', '#4f46e5');
-      setVar('--font', controls.font.value);
-      setVar('--scale', '1');
-      setVar('--sidebar', '34%');
-      setVar('--gap', '18px');
-      avatarWrap.style.display = 'grid';
-      document.querySelector('.accent').style.background =
-        'linear-gradient(90deg, var(--accent), #a78bfa)';
-    });
-
-    // ===== DRAG-AND-DROP REORDER =====
-    const container = document.getElementById('sections');
-    let dragEl = null;
-
-    container.querySelectorAll('.section').forEach(sec => {
-      sec.addEventListener('dragstart', () => {
-        dragEl = sec; sec.classList.add('dragging');
-      });
-      sec.addEventListener('dragend', () => {
-        sec.classList.remove('dragging'); dragEl = null;
-      });
-      sec.addEventListener('dragover', e => {
-        e.preventDefault();
-        const after = getDragAfterElement(sec.parentElement, e.clientY);
-        if (after == null) {
-          sec.parentElement.appendChild(dragEl);
-        } else {
-          sec.parentElement.insertBefore(dragEl, after);
-        }
-      });
-    });
-
-        function getDragAfterElement(container, y) {
-      const draggableElements = [...container.querySelectorAll('.section:not(.dragging)')];
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-  </script>
 </body>
 </html>

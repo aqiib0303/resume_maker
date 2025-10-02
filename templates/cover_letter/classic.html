@@ -200,10 +200,10 @@
       This cover letter is optimized for both screen and print.
     </div>
 
-    <!-- Download -->
-    {% if not is_pdf %}
+    <!-- Download with token -->
+    {% if not is_pdf and token %}
     <div class="actions">
-      <form method="POST" action="{{ url_for('cover_letter_download') }}">
+      <form method="POST" action="{{ url_for('cover_letter_download', token=token) }}">
         {% for key, value in data.items() %}
           <input type="hidden" name="{{ key }}" value="{{ value|e }}">
         {% endfor %}

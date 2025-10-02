@@ -129,9 +129,10 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <!-- ✅ Added token for secure download -->
+  <div class="page" data-token="{{ token }}">
 
-    <!-- Header (simple, ATS-first reading order) -->
+    <!-- Header -->
     <header class="header">
       {% set full_name = data.name if data and data.name is defined else '' %}
       <h1 class="name">{{ full_name or "Your Name" }}</h1>
@@ -249,12 +250,16 @@
     </section>
     {% endif %}
 
-    <!-- Optional: tiny footer for ATS context; omit if empty -->
+    <!-- Footer -->
     {% if data and (data.email or data.phone) %}
     <section class="section small">
       <div class="rule"></div>
       <div>
-        {{ data.name if data and data.name }} — {{ data.role if data and data.role }}{% if data.role and (data.email or data.phone) %} • {% endif %}{% if data.email %}{{ data.email }}{% endif %}{% if data.email and data.phone %} • {% endif %}{% if data.phone %}{{ data.phone }}{% endif %}
+        {{ data.name if data and data.name }} — {{ data.role if data and data.role }}
+        {% if data.role and (data.email or data.phone) %} • {% endif %}
+        {% if data.email %}{{ data.email }}{% endif %}
+        {% if data.email and data.phone %} • {% endif %}
+        {% if data.phone %}{{ data.phone }}{% endif %}
       </div>
     </section>
     {% endif %}

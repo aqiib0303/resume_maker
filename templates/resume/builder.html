@@ -44,7 +44,7 @@
             <h3 class="text-lg font-semibold flex items-center gap-2 mb-4 text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4h9m-9 4h6m-6 4h6m-6 4h6m-6 4h6" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4h9m-9 4h6m-6 4h6m-6 4h6" />
                 </svg>
                 Professional Summary
             </h3>
@@ -128,8 +128,8 @@
         <h3 class="text-xl font-semibold mb-4 text-gray-700">Resume Preview</h3>
         <iframe id="resumePreview" class="w-full h-[600px] border rounded-lg shadow"></iframe>
 
-        <!-- Download button inside preview -->
-        <form id="downloadForm" method="POST" action="" class="mt-4 text-right"></form>
+        <!-- Download button -->
+        <div id="downloadForm" class="mt-4 text-right"></div>
     </div>
 </div>
 
@@ -148,21 +148,25 @@ document.getElementById("previewBtn").addEventListener("click", function(e) {
     .then(html => {
         document.getElementById("previewContainer").classList.remove("hidden");
         document.getElementById("resumePreview").srcdoc = html;
-        document.getElementById("downloadForm").action = "/resume/download/" + style;
-        
-        // Copy form data into hidden inputs for download
+
+        // ✅ Extract token from preview HTML
+        let tokenMatch = html.match(/data-token="([^"]+)"/);
+        let token = tokenMatch ? tokenMatch[1] : null;
+
         const downloadForm = document.getElementById("downloadForm");
-        downloadForm.innerHTML = `
-            ${Array.from(formData.entries()).map(([k,v]) =>
-                `<input type="hidden" name="${k}" value="${v}">`
-            ).join("")}
-            <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Download PDF
-            </button>
-        `;
+        if (token) {
+            downloadForm.innerHTML = `
+                <a href="/resume/download/${token}" 
+                   class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Download PDF
+                </a>
+            `;
+        } else {
+            downloadForm.innerHTML = `<p class="text-red-500">⚠️ Could not generate token for download.</p>`;
+        }
     });
 });
 
